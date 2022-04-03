@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html
+        xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+        layout:decorate="~{layout/layout}"
+        th:with="activeMenuItem='Home'">
+<head>
+    <title>Forecast Game</title>
+</head>
+<body>
+<div layout:fragment="page-content">
+    <div th:replace="fragment/caption :: caption(title='Dashboard')">
+    </div>
+</div>
+</body>
+</html>

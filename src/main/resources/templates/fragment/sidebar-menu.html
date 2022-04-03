@@ -1,0 +1,24 @@
+<html xmlns:th="http://www.thymeleaf.org">
+
+    <!--/*@thymesVar id="link" type="java.lang.String"*/-->
+    <!--/*@thymesVar id="title" type="java.lang.String"*/-->
+    <!--/*@thymesVar id="icon" type="java.lang.String"*/-->
+    <!--/*@thymesVar id="activeMenuItem" type="java.lang.String"*/-->
+    <li th:fragment="nav-item(link, title, icon)" class="nav-item">
+        <a class="nav-link" aria-current="page" th:href="${link}"
+            th:classappend="${title == activeMenuItem}? 'active' : ''">
+            <span th:data-feather="${icon}"></span>
+            [[${title}]]
+        </a>
+    </li>
+
+    <div th:fragment="menu" class="position-sticky pt-3">
+        <ul class="nav flex-column">
+            <li th:replace="fragment/sidebar-menu :: nav-item(link='/', title='Home', icon='home')"></li>
+            <li th:replace="fragment/sidebar-menu :: nav-item(link='/teams', title='Teams', icon='users')"></li>
+            <li th:replace="fragment/sidebar-menu :: nav-item(link='/matches', title='Matches', icon='list')"></li>
+            <li th:replace="fragment/sidebar-menu :: nav-item(link='/players', title='Players', icon='user')"></li>
+        </ul>
+    </div>
+
+</html>

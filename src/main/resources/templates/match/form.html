@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/layout}">
+<head>
+    <meta charset="UTF-8">
+    <title>Match details</title>
+</head>
+<body>
+<div layout:fragment="page-content">
+    <div th:replace="fragment/caption :: caption(title='Match')">
+    </div>
+    <form class="row g-3"
+          th:object="${matchForm}" method="post">
+
+        <div class="container">
+            <input type="hidden" name="id" th:value="*{id}" />
+            <div class="row">
+                <div class="col-xxl-2 col-md-4 col-sm-6">
+                    <input th:replace="~{fragment/input-date-field :: input ('Date', 'date')}" />
+                </div>
+                <div class="col-xxl-2 col-md-4 col-sm-6">
+                    <input th:replace="~{fragment/input-field :: input ('time', 'Time', 'time')}" />
+                </div>
+            </div>
+            <div class="row mt-2">
+                <div class="col-md-4 col-sm-6">
+                    <input th:replace="~{fragment/select-field :: select ('Home', 'home', ${teams})}" />
+                </div>
+                <div class="col-md-4 col-sm-6">
+                    <input th:replace="~{fragment/select-field :: select ('Visitor', 'visitor', ${teams})}" />
+                </div>
+            </div>
+            <div class="row mt-2">
+                <div class="col-md-4 col-sm-6">
+                    <input th:replace="~{fragment/input-field :: input ('text', 'Info', 'info')}" />
+                </div>
+            </div>
+            <div class="row mt-2">
+                <div class="col-xxl-1 col-md-2 col-sm-3">
+                    <input th:replace="~{fragment/input-field :: input ('text', 'Home score', 'homeScore')}" />
+                </div>
+                <div class="col-xxl-1 col-md-2 col-sm-3">
+                    <input th:replace="~{fragment/input-field :: input ('text', 'Visitor score', 'visitorScore')}" />
+                </div>
+            </div>
+        </div>
+
+        <div class="col-12">
+            <button class="btn btn-primary" type="submit">Save</button>
+            <button class="btn">Cancel</button>
+        </div>
+    </form>
+</div>
+</body>
+</html>

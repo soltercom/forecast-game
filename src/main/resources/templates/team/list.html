@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html   xmlns:th="http://www.thymeleaf.org"
+        xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+        layout:decorate="~{layout/layout}"
+        th:with="activeMenuItem='Teams'">
+<head>
+    <title>Teams</title>
+</head>
+<body>
+<div layout:fragment="page-content">
+    <div th:replace="fragment/caption :: caption(title='Teams')">
+    </div>
+    <table class="table">
+        <thead>
+        <tr>
+            <th scope="col">Name</th>
+            <th scope="col"></th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="team : ${list}">
+            <td th:text="${team.name()}"></td>
+            <td><a th:href="@{teams/__${team.id()}__/edit}">Edit</a></td>
+        </tr>
+        </tbody>
+    </table>
+
+</div>
+</body>
+</html>
+

@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html   xmlns:th="http://www.thymeleaf.org"
+        xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+        layout:decorate="~{layout/layout}"
+        th:with="activeMenuItem='Players'">
+<head>
+    <title>Players</title>
+</head>
+<body>
+<div layout:fragment="page-content">
+    <div th:replace="fragment/caption :: caption(title='Players')">
+    </div>
+    <table class="table">
+        <thead>
+            <tr>
+                <th scope="col">Name</th>
+                <th scope="col"></th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="player : ${list}">
+                <td th:text="${player.name()}"></td>
+                <td><a th:href="@{players/__${player.id()}__/edit}">Edit</a></td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+</body>
+</html>
+

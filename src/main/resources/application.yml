@@ -1,0 +1,16 @@
+spring:
+  datasource:
+    url: jdbc:hsqldb:mem:testdb
+    username: SA
+    password:
+  thymeleaf:
+    cache: false
+  mvc:
+    format:
+      date: dd.MM.yyyy
+      time: HH:mm
+      date-time: dd.MM.yyyy HH:mm
+
+logging:
+  level:
+    org.springframework.jdbc.core.JdbcTemplate: TRACE
