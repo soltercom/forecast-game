@@ -7,19 +7,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.servlet.MockMvc;
-import ru.spb.altercom.forecastgame.form.TeamForm;
 import ru.spb.altercom.forecastgame.service.TeamService;
 
 import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
-import java.util.stream.Stream;
 
 import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
-import static ru.spb.altercom.forecastgame.helpers.Stubs.getListOfTeamForms;
 import static ru.spb.altercom.forecastgame.helpers.Stubs.getNewTeamForm;
 
 @WebMvcTest(TeamController.class)
@@ -79,6 +74,35 @@ class TeamControllerTests {
     void processFormHasErrors() throws Exception {
         mockMvc.perform(post("/teams/{id}/edit", TEAM_ID)
                         .param("id", TEAM_ID.toString())
+                        .param("name", ""))
+                .andExpect(model().attributeHasErrors("teamForm"))
+                .andExpect(model().attributeHasFieldErrors("teamForm", "name"))
+                .andExpect(status().isOk())
+                .andExpect(view().name(TEAM_FORM));
+    }
+
+    @Test
+    @DisplayName("GET /teams/new")
+    void initNewForm() throws Exception {
+        mockMvc.perform(get("/teams/new"))
+                .andExpect(status().isOk())
+                .andExpect(model().attributeExists("teamForm"))
+                .andExpect(view().name(TEAM_FORM));
+    }
+    @Test
+    @DisplayName("POST /teams/new")
+    void processNewFormSuccess() throws Exception {
+        mockMvc.perform(post("/teams/new")
+                        .param("name", "Test"))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(model().hasNoErrors())
+                .andExpect(view().name(REDIRECT_TEAM_LIST));
+    }
+
+    @Test
+    @DisplayName("POST /teams/new with empty team name")
+    void processNewFormHasErrors() throws Exception {
+        mockMvc.perform(post("/teams/new")
                         .param("name", ""))
                 .andExpect(model().attributeHasErrors("teamForm"))
                 .andExpect(model().attributeHasFieldErrors("teamForm", "name"))

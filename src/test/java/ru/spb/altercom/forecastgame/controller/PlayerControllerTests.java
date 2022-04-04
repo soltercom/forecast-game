@@ -81,4 +81,33 @@ class PlayerControllerTests {
                 .andExpect(view().name(PLAYER_FORM));
     }
 
+    @Test
+    @DisplayName("GET /players/new")
+    void initNewForm() throws Exception {
+        mockMvc.perform(get("/players/new"))
+                .andExpect(status().isOk())
+                .andExpect(model().attributeExists("playerForm"))
+                .andExpect(view().name(PLAYER_FORM));
+    }
+
+    @Test
+    @DisplayName("POST /players/new")
+    void processNewFormSuccess() throws Exception {
+        mockMvc.perform(post("/players/new")
+                        .param("name", "Test"))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(model().hasNoErrors())
+                .andExpect(view().name(REDIRECT_PLAYER_LIST));
+    }
+
+    @Test
+    @DisplayName("POST /players/new with empty player name")
+    void processNewFormHasErrors() throws Exception {
+        mockMvc.perform(post("/players/new")
+                        .param("name", ""))
+                .andExpect(model().attributeHasErrors("playerForm"))
+                .andExpect(model().attributeHasFieldErrors("playerForm", "name"))
+                .andExpect(status().isOk())
+                .andExpect(view().name(PLAYER_FORM));
+    }
 }

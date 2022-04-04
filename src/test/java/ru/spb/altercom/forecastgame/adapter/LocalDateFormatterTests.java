@@ -12,25 +12,25 @@ import static org.assertj.core.api.Assertions.assertThat;
 class LocalDateFormatterTests {
 
     @Test
-    @DisplayName("#parse -> #print")
-    void conversion() throws Exception {
+    @DisplayName("#parse")
+    void parse() throws Exception {
         var formatter = new LocalDateFormatter();
         var locale = Locale.getDefault();
-        var test = "01.01.2020";
-        var result = formatter.print(formatter.parse(test, locale), locale);
+        var test = "2020-01-01";
+        var result = formatter.parse(test, locale);
 
-        assertThat(test).isEqualTo(result);
+        assertThat(LocalDate.of(2020, 1, 1)).isEqualTo(result);
     }
 
     @Test
-    @DisplayName("#print -> #parse")
-    void reverseConversion() throws Exception {
+    @DisplayName("#print")
+    void print() {
         var formatter = new LocalDateFormatter();
         var locale = Locale.getDefault();
         var test = LocalDate.of(2020, 1, 1);
-        var result = formatter.parse(formatter.print(test, locale), locale);
+        var result = formatter.print(test, locale);
 
-        assertThat(test).isEqualTo(result);
+        assertThat(result).isEqualTo("01.01.2020");
     }
 
 }

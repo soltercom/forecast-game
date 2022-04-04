@@ -8,7 +8,7 @@
 </head>
 <body>
 <div layout:fragment="page-content">
-    <div th:replace="fragment/caption :: caption(title='Players')">
+    <div th:replace="fragment/caption :: list-caption(title='Players', buttonText='Add Player', buttonRef='/players/new')">
     </div>
     <table class="table">
         <thead>

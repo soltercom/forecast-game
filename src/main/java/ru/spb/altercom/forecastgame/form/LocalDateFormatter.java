@@ -12,15 +12,13 @@ import java.util.Locale;
 @Service
 public class LocalDateFormatter implements Formatter<LocalDate> {
 
-    private final static DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
-
     @Override
     public @NotNull LocalDate parse(@NotNull String text, @NotNull Locale locale) throws ParseException {
-        return LocalDate.parse(text, formatter);
+        return LocalDate.parse(text, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
     }
 
     @Override
     public @NotNull String print(LocalDate date, @NotNull Locale locale) {
-        return date.format(formatter);
+        return date.format(DateTimeFormatter.ofPattern("dd.MM.yyyy"));
     }
 }

@@ -115,4 +115,48 @@ class MatchControllerTests {
                 .andExpect(view().name(MATCH_FORM));
     }
 
+    @Test
+    @DisplayName("GET /matches/new")
+    void initNewForm() throws Exception {
+        mockMvc.perform(get("/matches/new"))
+                .andExpect(status().isOk())
+                .andExpect(model().attributeExists("matchForm"))
+                .andExpect(model().attributeExists("teams"))
+                .andExpect(model().attribute("teams", teamService.findAll()))
+                .andExpect(view().name(MATCH_FORM));
+    }
+
+    @Test
+    @DisplayName("POST /matches/new")
+    void processNewFormSuccess() throws Exception {
+        mockMvc.perform(post("/matches/new")
+                        .param("date", "01.01.2002")
+                        .param("time", "23:00")
+                        .param("home", MATCH_ID.toString())
+                        .param("visitor", MATCH_ID.toString())
+                        .param("info", "")
+                        .param("homeScore", "1")
+                        .param("visitorScore", "1"))
+                .andExpect(model().hasNoErrors())
+                .andExpect(status().is3xxRedirection())
+                .andExpect(view().name(REDIRECT_MATCH_LIST));
+    }
+
+    @Test
+    @DisplayName("POST /matches/new with empty match fields")
+    void processNewFormHasErrors() throws Exception {
+        mockMvc.perform(post("/matches/new")
+                        .param("homeScore", "-1")
+                        .param("visitorScore", "-1"))
+                .andExpect(model().attributeHasErrors("matchForm"))
+                .andExpect(model().attributeHasFieldErrors("matchForm", "date"))
+                .andExpect(model().attributeHasFieldErrors("matchForm", "time"))
+                .andExpect(model().attributeHasFieldErrors("matchForm", "home"))
+                .andExpect(model().attributeHasFieldErrors("matchForm", "visitor"))
+                .andExpect(model().attributeHasFieldErrors("matchForm", "homeScore"))
+                .andExpect(model().attributeHasFieldErrors("matchForm", "visitorScore"))
+                .andExpect(status().isOk())
+                .andExpect(view().name(MATCH_FORM));
+    }
+
 }

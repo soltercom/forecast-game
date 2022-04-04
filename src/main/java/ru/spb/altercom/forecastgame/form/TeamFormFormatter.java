@@ -24,6 +24,6 @@ public class TeamFormFormatter implements Formatter<TeamForm> {
 
     @Override
     public @NotNull String print(TeamForm teamForm, @NotNull Locale locale) {
-        return teamForm.id().toString();
+        return teamForm.id() == null ? "":  teamForm.id().toString();
     }
 }

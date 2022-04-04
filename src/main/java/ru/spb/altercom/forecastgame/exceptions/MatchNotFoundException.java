@@ -1,15 +1,11 @@
 package ru.spb.altercom.forecastgame.exceptions;
 
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.ResponseStatus;
+
+@ResponseStatus(HttpStatus.NOT_FOUND)
 public class MatchNotFoundException extends RuntimeException {
-
-    private final Long id;
-
     public MatchNotFoundException(Long id) {
-        this.id = id;
-    }
-
-    @Override
-    public String getMessage() {
-        return String.format("Match with id %d not found.", id);
+        super(String.format("Match with id %d not found.", id));
     }
 }

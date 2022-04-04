@@ -17,6 +17,12 @@ public record MatchForm(Long id,
                         @Min(0) int homeScore,
                         @Min(0) int visitorScore) {
 
+    public static MatchForm create() {
+        return new MatchForm(null, LocalDate.now(), LocalTime.now(),
+                new TeamForm(null, ""), new TeamForm(null, ""),
+                "", 0, 0);
+    }
+
     public boolean isNew() {
         return id == null;
     }

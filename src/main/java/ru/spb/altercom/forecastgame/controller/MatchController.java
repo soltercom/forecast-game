@@ -24,6 +24,7 @@ public class MatchController {
     private static final String REDIRECT_MATCH_LIST = "redirect:/matches";
     private static final String MATCH_LIST = "/match/list";
     private static final String MATCH_FORM = "/match/form";
+    private static final String MODEL_MATCH_FORM = "matchForm";
 
     private final MatchService matchService;
     private final TeamService teamService;
@@ -60,7 +61,7 @@ public class MatchController {
 
     @GetMapping("/{id}/edit")
     public String initForm(@PathVariable("id") Long id, ModelMap model) {
-        model.put("matchForm", matchService.findById(id));
+        model.put(MODEL_MATCH_FORM, matchService.findById(id));
         return MATCH_FORM;
     }
 
@@ -70,11 +71,31 @@ public class MatchController {
                                     BindingResult bindingResult,
                                     ModelMap model) {
         if (bindingResult.hasErrors()) {
-            model.put("matchForm", matchForm);
+            model.put(MODEL_MATCH_FORM, matchForm);
             return MATCH_FORM;
         }
 
         matchService.edit(matchForm);
+
+        return REDIRECT_MATCH_LIST;
+    }
+
+    @GetMapping("/new")
+    public String initNewForm(ModelMap model) {
+        model.put(MODEL_MATCH_FORM, MatchForm.create());
+        return MATCH_FORM;
+    }
+
+    @PostMapping("/new")
+    public String processNewForm(@Valid MatchForm matchForm,
+                              BindingResult bindingResult,
+                              ModelMap model) {
+        if (bindingResult.hasErrors()) {
+            model.put(MODEL_MATCH_FORM, matchForm);
+            return MATCH_FORM;
+        }
+
+        matchService.add(matchForm);
 
         return REDIRECT_MATCH_LIST;
     }

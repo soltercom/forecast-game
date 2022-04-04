@@ -20,6 +20,7 @@ public class PlayerController {
     private static final String REDIRECT_PLAYER_LIST = "redirect:/players";
     private static final String PLAYER_LIST = "/player/list";
     private static final String PLAYER_FORM = "/player/form";
+    private static final String MODEL_PLAYER_FORM = "playerForm";
 
     private final PlayerService playerService;
 
@@ -34,22 +35,42 @@ public class PlayerController {
     }
 
     @GetMapping("/{id}/edit")
-    public String initUpdateForm(@PathVariable("id") Long id, ModelMap model) {
-        model.put("playerForm", playerService.findById(id));
+    public String initForm(@PathVariable("id") Long id, ModelMap model) {
+        model.put(MODEL_PLAYER_FORM, playerService.findById(id));
         return PLAYER_FORM;
     }
 
     @PostMapping("/{id}/edit")
-    public String processUpdateForm(@PathVariable("id") Long id,
+    public String processForm(@PathVariable("id") Long id,
                                     @Valid PlayerForm playerForm,
                                     BindingResult bindingResult,
                                     ModelMap model) {
         if (bindingResult.hasErrors()) {
-            model.put("playerForm", playerForm);
+            model.put(MODEL_PLAYER_FORM, playerForm);
             return PLAYER_FORM;
         }
 
         playerService.edit(playerForm);
+
+        return REDIRECT_PLAYER_LIST;
+    }
+
+    @GetMapping("/new")
+    public String initNewForm(ModelMap model) {
+        model.put(MODEL_PLAYER_FORM, PlayerForm.create());
+        return PLAYER_FORM;
+    }
+
+    @PostMapping("/new")
+    public String processNewForm(@Valid PlayerForm playerForm,
+                                    BindingResult bindingResult,
+                                    ModelMap model) {
+        if (bindingResult.hasErrors()) {
+            model.put(MODEL_PLAYER_FORM, playerForm);
+            return PLAYER_FORM;
+        }
+
+        playerService.add(playerForm);
 
         return REDIRECT_PLAYER_LIST;
     }

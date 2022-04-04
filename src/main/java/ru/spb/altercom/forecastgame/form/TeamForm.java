@@ -5,6 +5,10 @@ import java.util.Objects;
 
 public record TeamForm(Long id, @NotEmpty String name) {
 
+    public static TeamForm create() {
+        return new TeamForm(null, "");
+    }
+
     public boolean isNew() {
         return id == null;
     }
@@ -18,7 +22,7 @@ public record TeamForm(Long id, @NotEmpty String name) {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof TeamForm teamForm)) return false;
-        return id.equals(teamForm.id);
+        return Objects.equals(id, teamForm.id);
     }
 
     @Override

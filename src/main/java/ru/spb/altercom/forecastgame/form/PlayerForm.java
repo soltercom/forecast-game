@@ -5,6 +5,10 @@ import java.util.Objects;
 
 public record PlayerForm(Long id, @NotEmpty String name) {
 
+    public static PlayerForm create() {
+        return new PlayerForm(null, "");
+    }
+
     public boolean isNew() {
         return id == null;
     }

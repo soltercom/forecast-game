@@ -21,6 +21,7 @@ public class TeamController {
     private static final String REDIRECT_TEAM_LIST = "redirect:/teams";
     private static final String TEAM_LIST = "/team/list";
     private static final String TEAM_FORM = "/team/form";
+    private static final String MODEL_TEAM_FORM = "teamForm";
 
     private final TeamService teamService;
 
@@ -37,7 +38,7 @@ public class TeamController {
 
     @GetMapping("/{id}/edit")
     public String initForm(@PathVariable("id") Long id, ModelMap model) {
-        model.put("teamForm", teamService.findById(id));
+        model.put(MODEL_TEAM_FORM, teamService.findById(id));
         return TEAM_FORM;
     }
 
@@ -47,11 +48,31 @@ public class TeamController {
                                     BindingResult bindingResult,
                                     ModelMap model) {
         if (bindingResult.hasErrors()) {
-            model.put("teamForm", teamForm);
+            model.put(MODEL_TEAM_FORM, teamForm);
             return TEAM_FORM;
         }
 
         teamService.edit(teamForm);
+
+        return REDIRECT_TEAM_LIST;
+    }
+
+    @GetMapping("/new")
+    public String initNewForm(ModelMap model) {
+        model.put(MODEL_TEAM_FORM, TeamForm.create());
+        return TEAM_FORM;
+    }
+
+    @PostMapping("/new")
+    public String processNewForm(@Valid TeamForm teamForm,
+                              BindingResult bindingResult,
+                              ModelMap model) {
+        if (bindingResult.hasErrors()) {
+            model.put(MODEL_TEAM_FORM, teamForm);
+            return TEAM_FORM;
+        }
+
+        teamService.add(teamForm);
 
         return REDIRECT_TEAM_LIST;
     }
