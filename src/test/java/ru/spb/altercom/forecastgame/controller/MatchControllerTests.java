@@ -65,6 +65,7 @@ class MatchControllerTests {
                 .andExpect(status().isOk())
                 .andExpect(model().attributeExists("list"))
                 .andExpect(model().attribute("list", matchService.findAll()))
+                .andExpect(model().attribute("formTitle", "Matches"))
                 .andExpect(view().name(MATCH_LIST));
     }
 
@@ -77,6 +78,7 @@ class MatchControllerTests {
                 .andExpect(model().attribute("matchForm", matchService.findById(MATCH_ID)))
                 .andExpect(model().attributeExists("teams"))
                 .andExpect(model().attribute("teams", teamService.findAll()))
+                .andExpect(model().attribute("formTitle", "Match (" + MATCH_ID + ")"))
                 .andExpect(view().name(MATCH_FORM));
     }
 
@@ -111,6 +113,7 @@ class MatchControllerTests {
                 .andExpect(model().attributeHasFieldErrors("matchForm", "visitor"))
                 .andExpect(model().attributeHasFieldErrors("matchForm", "homeScore"))
                 .andExpect(model().attributeHasFieldErrors("matchForm", "visitorScore"))
+                .andExpect(model().attribute("formTitle", "Match (" + MATCH_ID + ")"))
                 .andExpect(status().isOk())
                 .andExpect(view().name(MATCH_FORM));
     }
@@ -123,6 +126,7 @@ class MatchControllerTests {
                 .andExpect(model().attributeExists("matchForm"))
                 .andExpect(model().attributeExists("teams"))
                 .andExpect(model().attribute("teams", teamService.findAll()))
+                .andExpect(model().attribute("formTitle", "Match (New)"))
                 .andExpect(view().name(MATCH_FORM));
     }
 
@@ -155,6 +159,7 @@ class MatchControllerTests {
                 .andExpect(model().attributeHasFieldErrors("matchForm", "visitor"))
                 .andExpect(model().attributeHasFieldErrors("matchForm", "homeScore"))
                 .andExpect(model().attributeHasFieldErrors("matchForm", "visitorScore"))
+                .andExpect(model().attribute("formTitle", "Match (New)"))
                 .andExpect(status().isOk())
                 .andExpect(view().name(MATCH_FORM));
     }

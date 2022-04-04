@@ -45,6 +45,7 @@ class TeamControllerTests {
                 .andExpect(status().isOk())
                 .andExpect(model().attributeExists("list"))
                 .andExpect(model().attribute("list", teamService.findAll()))
+                .andExpect(model().attribute("formTitle", "Teams"))
                 .andExpect(view().name(TEAM_LIST));
     }
 
@@ -55,6 +56,7 @@ class TeamControllerTests {
             .andExpect(status().isOk())
             .andExpect(model().attributeExists("teamForm"))
             .andExpect(model().attribute("teamForm", teamService.findById(TEAM_ID)))
+            .andExpect(model().attribute("formTitle", "Team (" + TEAM_ID + ")"))
             .andExpect(view().name(TEAM_FORM));
     }
 
@@ -77,6 +79,7 @@ class TeamControllerTests {
                         .param("name", ""))
                 .andExpect(model().attributeHasErrors("teamForm"))
                 .andExpect(model().attributeHasFieldErrors("teamForm", "name"))
+                .andExpect(model().attribute("formTitle", "Team (" + TEAM_ID + ")"))
                 .andExpect(status().isOk())
                 .andExpect(view().name(TEAM_FORM));
     }
@@ -87,6 +90,7 @@ class TeamControllerTests {
         mockMvc.perform(get("/teams/new"))
                 .andExpect(status().isOk())
                 .andExpect(model().attributeExists("teamForm"))
+                .andExpect(model().attribute("formTitle", "Team (New)"))
                 .andExpect(view().name(TEAM_FORM));
     }
     @Test
@@ -106,6 +110,7 @@ class TeamControllerTests {
                         .param("name", ""))
                 .andExpect(model().attributeHasErrors("teamForm"))
                 .andExpect(model().attributeHasFieldErrors("teamForm", "name"))
+                .andExpect(model().attribute("formTitle", "Team (New)"))
                 .andExpect(status().isOk())
                 .andExpect(view().name(TEAM_FORM));
     }

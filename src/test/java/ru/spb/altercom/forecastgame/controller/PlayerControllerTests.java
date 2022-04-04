@@ -45,6 +45,7 @@ class PlayerControllerTests {
                 .andExpect(status().isOk())
                 .andExpect(model().attributeExists("list"))
                 .andExpect(model().attribute("list", playerService.findAll()))
+                .andExpect(model().attribute("formTitle", "Players"))
                 .andExpect(view().name(PLAYER_LIST));
     }
 
@@ -55,6 +56,7 @@ class PlayerControllerTests {
                 .andExpect(status().isOk())
                 .andExpect(model().attributeExists("playerForm"))
                 .andExpect(model().attribute("playerForm", playerService.findById(PLAYER_ID)))
+                .andExpect(model().attribute("formTitle", "Player (" + PLAYER_ID + ")"))
                 .andExpect(view().name(PLAYER_FORM));
     }
 
@@ -77,6 +79,7 @@ class PlayerControllerTests {
                         .param("name", ""))
                 .andExpect(model().attributeHasErrors("playerForm"))
                 .andExpect(model().attributeHasFieldErrors("playerForm", "name"))
+                .andExpect(model().attribute("formTitle", "Player (" + PLAYER_ID + ")"))
                 .andExpect(status().isOk())
                 .andExpect(view().name(PLAYER_FORM));
     }
@@ -87,6 +90,7 @@ class PlayerControllerTests {
         mockMvc.perform(get("/players/new"))
                 .andExpect(status().isOk())
                 .andExpect(model().attributeExists("playerForm"))
+                .andExpect(model().attribute("formTitle", "Player (New)"))
                 .andExpect(view().name(PLAYER_FORM));
     }
 
@@ -107,6 +111,7 @@ class PlayerControllerTests {
                         .param("name", ""))
                 .andExpect(model().attributeHasErrors("playerForm"))
                 .andExpect(model().attributeHasFieldErrors("playerForm", "name"))
+                .andExpect(model().attribute("formTitle", "Player (New)"))
                 .andExpect(status().isOk())
                 .andExpect(view().name(PLAYER_FORM));
     }

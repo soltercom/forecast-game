@@ -5,11 +5,11 @@
       layout:decorate="~{layout/layout}">
 <head>
     <meta charset="UTF-8">
-    <title>Match details</title>
+    <title>[[${formTitle}]]</title>
 </head>
 <body>
 <div layout:fragment="page-content">
-    <div th:replace="fragment/caption :: caption(title='Match')">
+    <div th:replace="fragment/caption :: caption(title=${formTitle})">
     </div>
     <form class="row g-3"
           th:object="${matchForm}" method="post">
@@ -49,7 +49,7 @@
 
         <div class="col-12">
             <button class="btn btn-primary" type="submit">Save</button>
-            <button class="btn">Cancel</button>
+            <a role="button" class="btn" th:text="Cancel" th:href="@{/matches}">Cancel</a>
         </div>
     </form>
 </div>

@@ -1,12 +1,15 @@
 package ru.spb.altercom.forecastgame.form;
 
-import javax.validation.constraints.NotEmpty;
 import java.util.Objects;
 
-public record TeamForm(Long id, @NotEmpty String name) {
+public record TeamForm(Long id, String name) {
 
     public static TeamForm create() {
-        return new TeamForm(null, "");
+        return new TeamForm();
+    }
+
+    private TeamForm() {
+        this(null, "");
     }
 
     public boolean isNew() {

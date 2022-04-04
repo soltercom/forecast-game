@@ -4,11 +4,11 @@
         layout:decorate="~{layout/layout}"
         th:with="activeMenuItem='Players'">
 <head>
-    <title>Players</title>
+    <title>[[${formTitle}]]</title>
 </head>
 <body>
 <div layout:fragment="page-content">
-    <div th:replace="fragment/caption :: list-caption(title='Players', buttonText='Add Player', buttonRef='/players/new')">
+    <div th:replace="fragment/caption :: list-caption(title=${formTitle}, buttonText='Add Player', buttonRef='/players/new')">
     </div>
     <table class="table">
         <thead>
