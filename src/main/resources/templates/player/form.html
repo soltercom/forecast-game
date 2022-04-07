@@ -14,8 +14,25 @@
         <form class="row g-3"
               th:object="${playerForm}" method="post">
 
+            <input type="hidden" name="_csrf" th:value="${_csrf.token}"/>
+
             <input type="hidden" name="id" th:value="*{id}" />
-            <input th:replace="~{fragment/input-field :: input ('text', 'Name', 'name')}" />
+
+            <div class="row mt-2">
+                <div class="col-xxl-3 col-md-4 col-sm-6">
+                    <input th:replace="~{fragment/input-field :: input ('text', 'Name', 'name')}" />
+                </div>
+            </div>
+            <div class="row mt-2">
+                <div class="col-xxl-3 col-md-4 col-sm-6">
+                    <input th:replace="~{fragment/input-field :: input ('text', 'Password', 'password')}" />
+                </div>
+            </div>
+            <div class="row mt-2">
+                <div class="col-xxl-3 col-md-4 col-sm-6">
+                    <input th:replace="~{fragment/checked-field :: input ('Admin', 'isAdmin')}" />
+                </div>
+            </div>
 
             <div class="col-12">
                 <button class="btn btn-primary" type="submit">Save</button>

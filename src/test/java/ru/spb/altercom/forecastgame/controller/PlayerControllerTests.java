@@ -6,18 +6,21 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import ru.spb.altercom.forecastgame.service.PlayerService;
 
 import java.util.List;
 
 import static org.mockito.BDDMockito.given;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 import static ru.spb.altercom.forecastgame.helpers.Stubs.getNewPlayerForm;
 
 @WebMvcTest(PlayerController.class)
+@WithMockUser(authorities = "ADMIN")
 class PlayerControllerTests {
 
     private static final String REDIRECT_PLAYER_LIST = "redirect:/players";
@@ -65,7 +68,10 @@ class PlayerControllerTests {
     void processFormSuccess() throws Exception {
         mockMvc.perform(post("/players/{id}/edit", PLAYER_ID)
                         .param("id", PLAYER_ID.toString())
-                        .param("name", "Test"))
+                        .param("name", "Test")
+                        .param("password", "password")
+                        .param("isAdmin", "true")
+                        .with(csrf()))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(model().hasNoErrors())
                 .andExpect(view().name(REDIRECT_PLAYER_LIST));
@@ -76,7 +82,10 @@ class PlayerControllerTests {
     void processFormHasErrors() throws Exception {
         mockMvc.perform(post("/players/{id}/edit", PLAYER_ID)
                         .param("id", PLAYER_ID.toString())
-                        .param("name", ""))
+                        .param("name", "")
+                        .param("password", "password")
+                        .param("isAdmin", "true")
+                        .with(csrf()))
                 .andExpect(model().attributeHasErrors("playerForm"))
                 .andExpect(model().attributeHasFieldErrors("playerForm", "name"))
                 .andExpect(model().attribute("formTitle", "Player (" + PLAYER_ID + ")"))
@@ -98,7 +107,10 @@ class PlayerControllerTests {
     @DisplayName("POST /players/new")
     void processNewFormSuccess() throws Exception {
         mockMvc.perform(post("/players/new")
-                        .param("name", "Test"))
+                        .param("name", "Test")
+                        .param("password", "password")
+                        .param("isAdmin", "true")
+                        .with(csrf()))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(model().hasNoErrors())
                 .andExpect(view().name(REDIRECT_PLAYER_LIST));
@@ -108,7 +120,8 @@ class PlayerControllerTests {
     @DisplayName("POST /players/new with empty player name")
     void processNewFormHasErrors() throws Exception {
         mockMvc.perform(post("/players/new")
-                        .param("name", ""))
+                        .param("name", "")
+                        .with(csrf()))
                 .andExpect(model().attributeHasErrors("playerForm"))
                 .andExpect(model().attributeHasFieldErrors("playerForm", "name"))
                 .andExpect(model().attribute("formTitle", "Player (New)"))

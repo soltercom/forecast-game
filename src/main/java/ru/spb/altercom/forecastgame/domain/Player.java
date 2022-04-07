@@ -3,47 +3,58 @@ package ru.spb.altercom.forecastgame.domain;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.PersistenceConstructor;
 import org.springframework.data.relational.core.mapping.Table;
-import ru.spb.altercom.forecastgame.form.PlayerForm;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
+import javax.validation.constraints.NotEmpty;
+import java.util.Collection;
+import java.util.List;
 import java.util.Objects;
 
 @Table("PLAYERS")
-public class Player {
+public class Player implements UserDetails {
 
     @Id
     private final Long id;
 
-    private final String name;
+    @NotEmpty
+    private final String username;
+
+    @NotEmpty
+    private final String password;
+
+    private final Boolean isAdmin;
 
     @PersistenceConstructor
-    public Player(Long id, String name) {
+    public Player(Long id, String username, String password, Boolean isAdmin) {
         this.id = id;
-        this.name = name;
-    }
-
-    public Player(String name) {
-        this(null, name);
-    }
-
-    public Player(PlayerForm playerDto) {
-        this(playerDto.id(), playerDto.name());
-    }
-
-    public Player withId(Long id) {
-        return new Player(id, name);
+        this.username = username;
+        this.password = password;
+        this.isAdmin = isAdmin;
     }
 
     public Long getId() {
         return id;
     }
 
-    public String getName() {
-        return name;
+    public boolean isAdmin() {
+        return isAdmin;
+    }
+
+    @Override
+    public String getPassword() {
+        return password;
+    }
+
+    @Override
+    public String getUsername() {
+        return username;
     }
 
     @Override
     public String toString() {
-        return getName();
+        return getUsername();
     }
 
     @Override
@@ -56,5 +67,30 @@ public class Player {
     @Override
     public int hashCode() {
         return Objects.hash(getId());
+    }
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return List.of(new SimpleGrantedAuthority("ROLE_ADMIN"));
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return true;
     }
 }

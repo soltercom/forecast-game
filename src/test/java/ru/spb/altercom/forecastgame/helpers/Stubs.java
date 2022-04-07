@@ -1,6 +1,7 @@
 package ru.spb.altercom.forecastgame.helpers;
 
 import com.github.javafaker.Faker;
+import ru.spb.altercom.forecastgame.domain.Player;
 import ru.spb.altercom.forecastgame.form.MatchForm;
 import ru.spb.altercom.forecastgame.form.PlayerForm;
 import ru.spb.altercom.forecastgame.form.TeamForm;
@@ -18,8 +19,12 @@ public class Stubs {
 
     private static final Faker faker = new Faker();
 
+    public static Player getPlayer() {
+        return new Player(1L, "Player", "Password", false);
+    }
+
     public static PlayerForm getNewPlayerForm() {
-        return new PlayerForm(null, faker.name().fullName());
+        return new PlayerForm(null, faker.name().fullName(), "11111", false);
     }
 
     public static TeamForm getNewTeamForm() {

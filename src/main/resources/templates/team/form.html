@@ -12,7 +12,9 @@
     <div th:replace="fragment/caption :: caption(title=${formTitle})">
     </div>
     <form class="row g-3"
-          th:object="${teamForm}" method="post">
+          th:object="${teamForm}" th:method="post">
+
+        <input type="hidden" name="_csrf" th:value="${_csrf.token}"/>
 
         <input type="hidden" name="id" th:value="*{id}" />
         <input th:replace="~{fragment/input-field :: input ('text', 'Name', 'name')}" />

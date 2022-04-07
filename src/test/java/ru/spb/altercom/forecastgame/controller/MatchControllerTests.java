@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import ru.spb.altercom.forecastgame.form.LocalDateFormatter;
 import ru.spb.altercom.forecastgame.form.TeamFormFormatter;
@@ -18,12 +19,14 @@ import java.util.List;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.given;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 import static ru.spb.altercom.forecastgame.helpers.Stubs.*;
 
 @WebMvcTest(MatchController.class)
+@WithMockUser(authorities = "ADMIN")
 class MatchControllerTests {
 
     private static final String REDIRECT_MATCH_LIST = "redirect:/matches";
@@ -93,7 +96,8 @@ class MatchControllerTests {
                         .param("visitor", MATCH_ID.toString())
                         .param("info", "")
                         .param("homeScore", "1")
-                        .param("visitorScore", "1"))
+                        .param("visitorScore", "1")
+                        .with(csrf()))
                 .andExpect(model().hasNoErrors())
                 .andExpect(status().is3xxRedirection())
                 .andExpect(view().name(REDIRECT_MATCH_LIST));
@@ -105,7 +109,8 @@ class MatchControllerTests {
         mockMvc.perform(post("/matches/{id}/edit", MATCH_ID)
                         .param("id", MATCH_ID.toString())
                         .param("homeScore", "-1")
-                        .param("visitorScore", "-1"))
+                        .param("visitorScore", "-1")
+                        .with(csrf()))
                 .andExpect(model().attributeHasErrors("matchForm"))
                 .andExpect(model().attributeHasFieldErrors("matchForm", "date"))
                 .andExpect(model().attributeHasFieldErrors("matchForm", "time"))
@@ -140,7 +145,8 @@ class MatchControllerTests {
                         .param("visitor", MATCH_ID.toString())
                         .param("info", "")
                         .param("homeScore", "1")
-                        .param("visitorScore", "1"))
+                        .param("visitorScore", "1")
+                        .with(csrf()))
                 .andExpect(model().hasNoErrors())
                 .andExpect(status().is3xxRedirection())
                 .andExpect(view().name(REDIRECT_MATCH_LIST));
@@ -151,7 +157,8 @@ class MatchControllerTests {
     void processNewFormHasErrors() throws Exception {
         mockMvc.perform(post("/matches/new")
                         .param("homeScore", "-1")
-                        .param("visitorScore", "-1"))
+                        .param("visitorScore", "-1")
+                        .with(csrf()))
                 .andExpect(model().attributeHasErrors("matchForm"))
                 .andExpect(model().attributeHasFieldErrors("matchForm", "date"))
                 .andExpect(model().attributeHasFieldErrors("matchForm", "time"))

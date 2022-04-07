@@ -4,6 +4,7 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.PersistenceConstructor;
 import org.springframework.data.relational.core.mapping.Table;
 
+import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 import java.util.Objects;
 
@@ -13,10 +14,13 @@ public class Match {
     @Id
     private final Long id;
 
+    @NotNull
     private final LocalDateTime date;
 
+    @NotNull
     private final Long home;
 
+    @NotNull
     private final Long visitor;
 
     private final String info;
@@ -34,10 +38,6 @@ public class Match {
         this.info = info;
         this.homeScore = homeScore;
         this.visitorScore = visitorScore;
-    }
-
-    public Match(LocalDateTime date, Long home, Long visitor, String info) {
-        this(null, date, home, visitor, info, 0, 0);
     }
 
     public Long getId() {

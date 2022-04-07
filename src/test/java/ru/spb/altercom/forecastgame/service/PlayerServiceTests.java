@@ -42,14 +42,17 @@ class PlayerServiceTests {
         var id = playerService.add(playerForm);
 
         playerForm = getNewPlayerForm();
-        var editedPlayerForm = new PlayerForm(id, playerForm.name());
+        var editedPlayerForm = new PlayerForm(id, playerForm.name(),
+                playerForm.password(), playerForm.isAdmin());
         playerService.edit(editedPlayerForm);
 
         var persistedPlayerForm = playerService.findById(id);
 
         assertThat(persistedPlayerForm)
             .hasFieldOrPropertyWithValue("id", editedPlayerForm.id())
-            .hasFieldOrPropertyWithValue("name", editedPlayerForm.name());
+            .hasFieldOrPropertyWithValue("name", editedPlayerForm.name())
+            .hasFieldOrPropertyWithValue("password", editedPlayerForm.password())
+            .hasFieldOrPropertyWithValue("isAdmin", editedPlayerForm.isAdmin());
     }
 
     @Test

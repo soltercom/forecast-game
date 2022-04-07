@@ -1,0 +1,11 @@
+<html lang="en">
+<!--/*@thymesVar id="label" type="java.lang.String"*/-->
+<!--/*@thymesVar id="name" type="java.lang.String"*/-->
+
+<th:block th:fragment="input(label, name)">
+    <div class="form-check form-switch">
+        <input type="checkbox" th:field="*{__${name}__}" class="form-check-input"/>
+        <label th:for="${name}" th:text="${label}" class="form-check-label"></label>
+    </div>
+</th:block>
+</html>
