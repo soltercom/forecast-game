@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html
+        xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+        layout:decorate="~{layout/layout}"
+        th:with="activeMenuItem='Home'">
+<head>
+    <title>Forecast Game</title>
+</head>
+<body>
+<div layout:fragment="page-content">
+    <div th:replace="fragment/caption :: caption(title='Dashboard')">
+    </div>
+    <div class="accordion" id="accordionContainer">
+        <!--/*@thymesVar id="match" type="ru.spb.altercom.forecastgame.form.MatchForm.java"*/-->
+        <!--/*@thymesVar id="forecast" type="ru.spb.altercom.forecastgame.form.ForecastData.java"*/-->
+        <div class="accordion-item" th:each="entrySet, iter : ${data}"
+             th:with="match=${entrySet.key}, forecastList=${entrySet.value}">
+            <h2 class="accordion-header" th:id="|heading${iter.count}|">
+                <button class="accordion-button collapsed"
+                        type="button"
+                        data-bs-toggle="collapse"
+                        th:data-bs-target="|#collapse${iter.count}|"
+                        aria-expanded="true"
+                        th:aria-controls="|collapse${iter.count}|">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col col-2" th:text="${match.date}"></div>
+                            <div class="col col-1" th:text="${match.time}"></div>
+                            <div class="col col-3" th:text="${match.home}"></div>
+                            <div class="col col-3" th:text="${match.visitor}"></div>
+                            <div class="col col-2" th:text="|${match.homeScore} : ${match.visitorScore}|">
+                        </div>
+                    </div>
+                </button>
+            </h2>
+            <div th:id="|collapse${iter.count}|"
+                 class="accordion-collapse collapse"
+                 th:classappend="${editedMatch != null && editedMatch == match.id}? 'show'"
+                 th:aria-labelledby="|heading${iter.count}|">
+                <div class="accordion-body">
+                    <div class="container">
+                        <div class="row" th:each="forecast : ${forecastList}">
+                            <div class="container">
+                                <div class="row fs-6">
+                                    <div class="col col-3 offset-6" th:text="${forecast.playerName}"></div>
+                                    <th:block th:switch="${editedMatch != null && editedMatch == match.id && currentPlayerId != null && currentPlayerId == forecast.playerId}">
+                                        <!--EDIT MODE-->
+                                        <div class="col col-3" th:case="${true}">
+                                            <!--/*@thymesVar id="forecastForm" type="ru.spb.altercom.forecastgame.form.ForecastForm.java"*/-->
+                                            <form th:method="post" th:action="@{/dashboard/save}" th:object="${forecastForm}">
+                                                <input type="hidden" name="_csrf" th:value="${_csrf.token}"/>
+                                                <input type="hidden" name="id" th:value="*{id}" />
+                                                <input type="hidden" th:field="*{match}"/>
+                                                <input type="hidden" th:field="*{player}"/>
+                                                <div class="row">
+                                                    <div class="col-3">
+                                                        <input type="text" th:field="*{homeScore}">
+                                                    </div>
+                                                    <div class="col-1">
+                                                        <label> : </label>
+                                                    </div>
+                                                    <div class="col-3">
+                                                        <input type="text" th:field="*{visitorScore}">
+                                                    </div>
+                                                    <div class="col-5">
+                                                        <button class="btn btn-sm btn-primary" th:text="'Save'"
+                                                                type="submit"></button>
+                                                    </div>
+                                                </div>
+                                            </form>
+                                        </div>
+                                        <!--READ MODE-->
+                                        <th:block th:case="${false}">
+                                            <th:block th:switch="${forecast.isNew()}">
+                                                <div th:case="${true}" class="col col-1" th:text="'- : -'"></div>
+                                                <div th:case="${false}" class="col col-1" th:text="|${forecast.forecastHomeScore} : ${forecast.forecastVisitorScore}|"></div>
+                                            </th:block>
+                                            <div class="col col-1" th:text="'0 (0)'"></div>
+                                            <div class="col col-1" th:if="${currentPlayerId != null && currentPlayerId == forecast.playerId}">
+                                                <form th:method="post" th:action="@{/dashboard/edit/__${match.id}__}">
+                                                    <input type="hidden" name="_csrf" th:value="${_csrf.token}"/>
+                                                    <button class="btn btn-sm btn-primary" th:text="'Edit'"
+                                                            type="submit"></button>
+                                                </form>
+                                            </div>
+                                        </th:block>
+                                    </th:block>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

@@ -5,7 +5,7 @@ import javax.validation.constraints.NotEmpty;
 public record LoginForm(@NotEmpty String username, String password) {
 
     public static LoginForm getLoginForm() {
-        return new LoginForm("Admin", "");
+        return new LoginForm("John Doe", "");
     }
 
 }

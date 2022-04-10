@@ -71,7 +71,12 @@ public class Player implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of(new SimpleGrantedAuthority("ROLE_ADMIN"));
+        if (Boolean.TRUE.equals(isAdmin)) {
+            return List.of(new SimpleGrantedAuthority("ROLE_PLAYER"),
+                           new SimpleGrantedAuthority("ROLE_ADMIN"));
+        } else {
+            return List.of(new SimpleGrantedAuthority("ROLE_PLAYER"));
+        }
     }
 
     @Override

@@ -1,7 +1,5 @@
 package ru.spb.altercom.forecastgame.controller;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,7 +13,7 @@ public class RootController {
 
     @GetMapping
     public String index() {
-        return "index";
+        return "redirect:/dashboard";
     }
 
     @GetMapping("/login")
